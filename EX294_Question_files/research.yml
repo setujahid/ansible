@@ -1,0 +1,29 @@
+---
+- name:
+  hosts: dev,test
+  tasks:
+        - name: Create a new primary partition for LVM
+          parted:
+                device: /dev/sdb
+                number: 1
+                flags: [ lvm ]
+                state: present
+                part_start: 3GiB
+
+        - name: create research vg
+          command: vgcreate research /dev/sdb1
+
+- name:
+  hosts: prod
+  tasks:
+        - name: Create a new primary partition for LVM
+          parted:
+                device: /dev/sdb
+                number: 1
+                flags: [ lvm ]
+                state: present
+                part_start: 4GiB
+
+        - name: create research vg
+          command: vgcreate research /dev/sdb1
+...
